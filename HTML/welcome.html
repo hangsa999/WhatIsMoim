@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>이게모임?</title>
+  <script src="../js/welcome.js"></script>
+</head>
+<style>
+  * {
+    /*border: 1px solid red;*/
+  }
+
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #E2E3E5; /* 배경색 추가 */
+  }
+
+  #head {
+    border: 1.5px solid black;
+    padding: 10px;
+    text-align: center;
+    margin: 20px; /* 중앙 정렬 및 상단 마진 추가 */
+    background-color: #EFF1F0; /* 배경색 추가 */
+    border-radius: 5px; /* 모서리 둥글게 추가 */
+  }
+
+  .user-info {
+    border: 1.5px solid black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: #EFF1F0; /* 배경색 추가 */
+    margin: 0 20px 20px; /* 좌우 여백 조정 및 하단 마진 추가 */
+    border-radius: 5px; /* 모서리 둥글게 추가 */
+  }
+
+  .user-info button {
+    margin-left: 10px; /* 버튼 간격 조정 */
+    background-color: darkgray;
+    color: black;
+    border: none;
+    padding: 10px 15px; /* 버튼 패딩 증가 */
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 5px; /* 모서리 둥글게 추가 */
+    transition: background-color 0.3s; /* 배경색 변경 시 부드럽게 효과 */
+  }
+
+  .user-info button:hover {
+    background-color: #969691; /* 마우스 호버 시 배경색 변경 */
+  }
+
+  .event-form {
+    border: 1.5px solid black;
+    padding: 20px; /* 상하좌우 패딩 증가 */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #EFF1F0; /* 배경색 추가 */
+    margin: 20px;
+    border-radius: 5px; /* 모서리 둥글게 추가 */
+  }
+
+  .event-form > div {
+    margin-top: 5px;
+  }
+
+  #moim {
+    width: 150px;
+  }
+
+  #date {
+    width: 130px;
+  }
+
+  #time {
+    width: 120px;
+  }
+
+  #text {
+    width: 500px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px; /* 라벨 아래 간격 추가 */
+  }
+
+  input,
+  select {
+    height: 30px; /* Set the height to 30px */
+    padding: 5px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+
+  button {
+    background-color: darkgray;
+    color: black;
+    border: none;
+    padding: 10px 15px; /* 버튼 패딩 증가 */
+    margin-top: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 5px; /* 모서리 둥글게 추가 */
+    transition: background-color 0.3s; /* 배경색 변경 시 부드럽게 효과 */
+  }
+
+  button#addBtn {
+    padding: 8px 12px; /* 추가 버튼 패딩 조정 */
+  }
+
+  button:hover {
+    background-color: #969691; /* 마우스 호버 시 배경색 변경 */
+  }
+
+  .list-group {
+    list-style: none;
+    padding: 5px;
+    background-color: #EFF1F0; /* 배경색 추가 */
+    border: 1.5px solid black;
+    margin: 0 20px; /* 좌우 여백 조정 */
+    border-radius: 5px; /* 모서리 둥글게 */
+  }
+
+  .list-group-item {
+    border: 1.5px solid black;
+    padding: 10px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0; /* 배경색 추가 */
+    border-radius: 5px; /* 모서리 둥글게 */
+  }
+
+  .list-group-item * {
+    margin-right: 10px;
+  }
+
+  .list-group-item select {
+    width: 150px;
+  }
+
+  .btn {
+    margin-left: 5px;
+  }
+</style>
+
+<body>
+
+<div id="head">
+  <div>이게모임?</div>
+</div>
+
+<div class="user-info">
+  <div id="userName"></div>
+  <button type="button" onclick="location.href='manage/setting.html'">설정</button>
+  <button type="button" onclick="logOut()">로그아웃</button>
+</div>
+
+<div class="event-form">
+  <div>
+    <label for="moim">모임
+      <select id="moim"></select>
+    </label>
+  </div>
+  <div>
+    <label for="date">날짜
+      <input type="date" id="date" max="2077-06-20">
+    </label>
+  </div>
+  <div>
+    <label for="time">시간
+      <input type="time" id="time" value="12:00">
+    </label>
+  </div>
+  <div id="textDiv">
+    <label for="text">내용
+      <input type="text" id="text">
+    </label>
+  </div>
+  <div>
+    <button type="button" id="addBtn" onclick="addTodo()">추가</button>
+  </div>
+</div>
+
+<ul id="todoList" class="list-group">
+  <li>일정</li>
+</ul>
+
+<script>
+  const storedLoginUser = localStorage.getItem('loginUser');
+
+  // JSON 문자열을 객체로 파싱
+  const loginUser = JSON.parse(storedLoginUser);
+
+  let name = document.querySelector("#userName")
+  name.textContent = loginUser.username + "님, 환영합니다."
+
+  function logOut() {
+    localStorage.removeItem("loginUser")
+    location.href = 'login.html'
+  }
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // 페이지 로드 시 실행될 코드
+    loadTodos();
+  });
+
+  const selectMoim = document.querySelector("#moim")
+  const date = document.querySelector("#date")
+  const time = document.querySelector("#time")
+  const todoList = document.getElementById('todoList')
+
+  let todos = [];
+
+  // 로그인 유저의 모임 목록 찾기
+  const moimsString = localStorage.getItem('moims')
+  const moims = JSON.parse(moimsString)
+
+  // 각 모임별 순회
+  for (let i = 0; i < moims.length; i++) {
+    // i번째 모임의 멤버 순회
+    for (let k = 0; k < moims[i].members.length; k++) {
+      // 로그인 유저가 i번째 모임의 멤버일 때
+      if (moims[i].members[k].email == loginUser.email) {
+        // select 안에 들어갈 option 생성
+        let moim = document.createElement("option")
+        moim.textContent = moims[i].moimName
+        // addMoim(select) 에 추가
+        selectMoim.append(moim)
+      }
+    }
+  }
+
+  function addTodo() {
+    let textValue = document.getElementById("text").value;
+
+    // li 추가
+    const newTodo = document.createElement("li")
+    newTodo.classList.add("list-group-item", "d-flex")
+
+    // 모임명, 날짜, 시간 추가 (수정 안되게 막아놓고, 수정 버튼을 누르면 변경할 수 있게 만듬
+    // 모임명
+    const addMoim = document.createElement("select")
+    addMoim.textContent = "모임명"
+
+    // 각 모임별 순회
+    for (let i = 0; i < moims.length; i++) {
+      // i번째 모임의 멤버 순회
+      for (let k = 0; k < moims[i].members.length; k++) {
+        // 로그인 유저가 i번째 모임의 멤버일 때
+        if (moims[i].members[k].email == loginUser.email) {
+          // select 안에 들어갈 option 생성
+          let moim = document.createElement("option")
+          moim.textContent = moims[i].moimName
+          // addMoim(select) 에 추가
+          addMoim.append(moim)
+        }
+      }
+    }
+
+    addMoim.disabled = true
+
+    const addDate = document.createElement("input")
+    addDate.type = "date"
+    addDate.id = "date"
+    addDate.max = "2077-06-20"
+    addDate.value = date.value
+    addDate.disabled = true
+
+    const addTime = document.createElement("input")
+    addTime.type = "time"
+    addTime.id = "time"
+    addTime.value = time.value
+    addTime.disabled = true
+
+    // input 안에 텍스트 추가
+    const text = document.createElement("input")
+    text.type = "text"
+    text.value = textValue
+    text.classList.add("me-auto", "align-self-center")
+
+    // 수정 버튼 추가
+    const completeBtn = document.createElement("button")
+    completeBtn.classList.add("btn", "btn-success")
+    completeBtn.textContent = "수정"
+    let completeBtnTest = true
+    completeBtn.onclick = function () {
+      if (completeBtnTest) {
+        completeBtnTest = false
+        completeBtn.textContent = "완료"
+        addMoim.disabled = false
+        addDate.disabled = false
+        addTime.disabled = false
+      } else {
+        let todosString = localStorage.getItem('todos')
+        let todosParse = JSON.parse(todosString)
+        const todoListItem = completeBtn.closest("li");
+        const index = Array.from(todoList.children).indexOf(todoListItem);
+        if (index !== -1) {
+          // 인덱스가 유효한 경우
+          todosParse[index - 1].moim = addMoim.value
+          todosParse[index - 1].date = addDate.value
+          todosParse[index - 1].time = addTime.value
+          todosParse[index - 1].textContent = text.value
+          // localStorage 에 업데이트
+          localStorage.setItem('todos', JSON.stringify(todosParse));
+        }
+        completeBtnTest = true;
+        completeBtn.textContent = "수정";
+        addMoim.disabled = true;
+        addDate.disabled = true;
+        addTime.disabled = true;
+      }
+
+    }
+
+    // 삭제 버튼 추가
+    const deleteBtn = document.createElement("button")
+    deleteBtn.classList.add("btn", "btn-danger")
+    deleteBtn.textContent = "삭제"
+    deleteBtn.onclick = function () {
+      // 화면에서 삭제버튼이 위치한 모임 삭제
+      newTodo.remove();
+      // todos 내에 내용이 일치하는 배열을 찾음
+      const index = todos.findIndex(item => item.text === textValue);
+      // 해당 배열이 있을 때
+      if (index !== -1) {
+        // 해당 배열을 삭제함
+        todos.splice(index, 1);
+        // localStorage 에 업데이트
+        updateLocalStorage()
+      }
+    }
+
+    newTodo.append(addMoim, addDate, addTime, text, completeBtn, deleteBtn)
+    todoList.append(newTodo)
+    addMoim.selectedIndex = selectMoim.selectedIndex
+
+    const newTodos = {
+      moim: selectMoim.value,
+      date: date.value,
+      time: time.value,
+      text: textValue,
+      writer: loginUser.username
+    }
+
+    todos.push(newTodos);
+
+    updateLocalStorage()
+
+  }
+
+  // 로그인 시 localstorage 에 저장된 Todos 불러와서 화면에 표시
+  function loadTodos() {
+    const savedTodos = JSON.parse(localStorage.getItem('todos')) || [];
+
+    savedTodos.forEach(function (savedTodo) {
+      const newTodo = document.createElement("li");
+      newTodo.classList.add("list-group-item", "d-flex");
+
+      // 모임option 추가할 select 생성
+      const addMoim = document.createElement("select");
+
+      // 로그인 유저의 모임 목록 찾기
+      const moimsString = localStorage.getItem('moims')
+      const moims = JSON.parse(moimsString)
+      // 각 모임별 순회
+      for (let i = 0; i < moims.length; i++) {
+        // i번째 모임의 멤버 순회
+        for (let k = 0; k < moims[i].members.length; k++) {
+          // 로그인 유저가 i번째 모임의 멤버일 때
+          if (moims[i].members[k].email == loginUser.email) {
+            // select 안에 들어갈 option 생성
+            let moim = document.createElement("option")
+            moim.textContent = moims[i].moimName
+            // addMoim(select) 에 추가
+            addMoim.append(moim)
+          }
+        }
+      }
+
+      // 출력한 addMoim 의 value 에 맞는 모임명 select
+      addMoim.value = savedTodo.moim
+
+      const addDate = document.createElement("input");
+      addDate.type = "date";
+      addDate.id = "date";
+      addDate.max = "2077-06-20";
+      addDate.value = savedTodo.date;
+
+      const addTime = document.createElement("input");
+      addTime.type = "time";
+      addTime.id = "time";
+      addTime.value = savedTodo.time;
+
+      const text = document.createElement("input")
+      text.type = "text"
+      text.value = savedTodo.text;
+      text.classList.add("me-auto", "align-self-center")
+
+      const completeBtn = document.createElement("button");
+      completeBtn.classList.add("btn", "btn-success");
+      completeBtn.textContent = "수정";
+      let completeBtnTest = true;
+
+      completeBtn.onclick = function () {
+        if (completeBtnTest) {
+          completeBtnTest = false;
+          completeBtn.textContent = "완료";
+          addMoim.disabled = false;
+          addDate.disabled = false;
+          addTime.disabled = false;
+        } else {
+          let todosString = localStorage.getItem('todos')
+          let todosParse = JSON.parse(todosString)
+          const todoListItem = completeBtn.closest("li");
+          const index = Array.from(todoList.children).indexOf(todoListItem);
+          if (index !== -1) {
+            // 인덱스가 유효한 경우
+            todosParse[index - 1].moim = addMoim.value
+            todosParse[index - 1].date = addDate.value
+            todosParse[index - 1].time = addTime.value
+            todosParse[index - 1].text = text.value
+            // localStorage 에 업데이트
+            localStorage.setItem('todos', JSON.stringify(todosParse));
+          }
+          completeBtnTest = true;
+          completeBtn.textContent = "수정";
+          addMoim.disabled = true;
+          addDate.disabled = true;
+          addTime.disabled = true;
+        }
+      }
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.classList.add("btn", "btn-danger");
+      deleteBtn.textContent = "삭제";
+
+      deleteBtn.onclick = function () {
+        newTodo.remove();
+        const index = todos.findIndex(item => item.text === savedTodo.text);
+        if (index !== -1) {
+          todos.splice(index, 1);
+          updateLocalStorage();
+        }
+      };
+
+      newTodo.append(addMoim, addDate, addTime, text, completeBtn, deleteBtn);
+      todoList.append(newTodo);
+
+      // 새로고침시 수정 안되는 상태로 출력
+      addMoim.disabled = true;
+      addDate.disabled = true;
+      addTime.disabled = true;
+
+    });
+
+    todos = savedTodos;
+
+    const currentDate = new Date().toISOString().split('T')[0]
+    document.getElementById("date").value = currentDate
+    document.getElementById("date").min = currentDate
+  }
+
+  function updateLocalStorage() {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }
+
+
+</script>
+
+</body>
+
+</html>

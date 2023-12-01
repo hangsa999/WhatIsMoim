@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>모임 생성</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #E2E3E5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input {
+      width: 300px;
+      padding: 10px;
+      margin: 10px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #969691;
+      color: white;
+      border: none;
+      padding: 10px 15px; /* 수정된 부분 */
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 10px 0;
+      cursor: pointer;
+      width: 150px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: rgb(128, 128, 128);
+    }
+  </style>
+</head>
+
+<body>
+
+<div>
+  <input type="text" id="moimName" placeholder="모임 이름">
+  <input type="password" id="moimPw" placeholder="모임 비밀번호">
+  <button type="button" onclick="makeMoim()">만들기</button>
+  <button onclick="goBack()">돌아가기</button>
+</div>
+
+<script>
+  function makeMoim() {
+    let loginUserString = localStorage.getItem("loginUser");
+    let loginUser = JSON.parse(loginUserString);
+    let email = loginUser.email;
+    let userName = loginUser.username;
+
+    // 기존 moims 가져오기
+    let moimsString = localStorage.getItem('moims');
+    // 객체로 변환 (기존 moims 가 없으면 새로 생성)
+    let moims = moimsString ? JSON.parse(moimsString) : [];
+
+    // 모임 이름
+    let moimNameValue = document.querySelector("#moimName").value;
+    // 모임 비밀번호
+    let moimPwValue = document.querySelector("#moimPw").value;
+
+    // 새 모임 객체 생성
+    const newMoim = {
+      moimName: moimNameValue,
+      moimPw: moimPwValue,
+      members: [{
+        email: email,
+        userName: userName
+      }],
+      admin: [{
+        email: email,
+        userName: userName
+      }]
+    };
+
+    moims.push(newMoim);
+
+    localStorage.setItem('moims', JSON.stringify(moims));
+
+    // 모임 생성 후 알림창
+
+    alert(`${moimNameValue} 모임을 만들었습니다`);
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+</script>
+
+</body>
+
+</html>

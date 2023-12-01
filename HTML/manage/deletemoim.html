@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>모임 삭제</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input {
+      width: 300px;
+      padding: 10px;
+      margin: 10px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #969691;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 10px 0;
+      cursor: pointer;
+      width: 150px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: rgb(128, 128, 128);
+    }
+  </style>
+</head>
+<body>
+<div>
+  <input type="text" id="moimName" placeholder="삭제할 모임 이름">
+  <button type="button" onclick="confirmAndDelete()">삭제</button>
+  <button onclick="goBack()">돌아가기</button>
+</div>
+
+<script>
+  const storedLoginUser = localStorage.getItem('loginUser');
+  const loginUser = JSON.parse(storedLoginUser);
+  const inputMoim = document.querySelector("#moimName");
+  const moimsString = localStorage.getItem('moims');
+  const moims = JSON.parse(moimsString);
+
+  let imoims = moims;
+
+  function deleteMoim() {
+    for (let i = 0; i < imoims.length; i++) {
+      if (inputMoim.value == imoims[i].moimName && loginUser.email == imoims[0].admin[0].email) {
+        let moimName = inputMoim.value
+        imoims.splice(i, 1);
+        localStorage.setItem('moims', JSON.stringify(imoims));
+        alert(`${moimName} 을 탈퇴했습니다.`);
+      } else if (inputMoim.value == imoims[i].moimName && !(loginUser.email == imoims[0].admin[0].email)) {
+        alert("관리자가 아닙니다.");
+      }
+    }
+  }
+
+  function confirmAndDelete() {
+    // 확인 창 띄우기
+    let moimName = document.getElementById("moimName").value
+    const isConfirmed = confirm(`정말로 ${moimName} 을 삭제하시겠습니까?`);
+    if (isConfirmed) {
+      deleteMoim();
+      // 탈퇴 후 알림
+    } else {
+      // 사용자가 취소한 경우
+      console.log('탈퇴 취소');
+    }
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+</script>
+</body>
+</html>

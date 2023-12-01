@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>모임 탈퇴</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      margin-bottom: 10px;
+    }
+
+    select {
+      width: 300px;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #969691;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 10px 0;
+      cursor: pointer;
+      width: 150px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: rgb(128, 128, 128);
+    }
+  </style>
+</head>
+
+<body>
+<div>
+  <label for="moim">
+    <select id="moim"></select>
+  </label>
+  <button type="button" onclick="confirmAndSeceession()">탈퇴</button>
+  <button onclick="goBack()">돌아가기</button>
+
+</div>
+
+<script>
+  const storedLoginUser = localStorage.getItem('loginUser');
+  const loginUser = JSON.parse(storedLoginUser);
+  const selectMoim = document.querySelector("#moim");
+  const moimsString = localStorage.getItem('moims');
+  const moims = JSON.parse(moimsString);
+
+  loadMoim();
+
+  function confirmAndSeceession() {
+    // 확인 창 띄우기
+    let moimName = document.getElementById("moim").value
+    const isConfirmed = confirm(`정말로 ${moimName} 에서 나가시겠습니까?`);
+    if (isConfirmed) {
+      secessionMoim();
+      // 탈퇴 후 알림
+      alert(`${moimName} 을 탈퇴했습니다.`);
+    } else {
+      // 사용자가 취소한 경우
+      console.log('탈퇴 취소');
+    }
+  }
+
+  function secessionMoim() {
+    let imoims = moims;
+
+    // 각 모임 순회
+    for (let i = 0; i < imoims.length; i++) {
+      // selectMoim.value 의 모임명과 moims[i]의 모임명이 같다면
+      if (selectMoim.value == imoims[i].moimName) {
+        const index = imoims[i].members.findIndex(item => item.email === loginUser.email);
+
+        // 해당 배열이 있을 때
+        if (index !== -1) {
+          // 해당 배열을 삭제함
+          imoims[i].members.splice(index, 1);
+
+          // selectMoim 에서 해당 모임 삭제
+          selectMoim.remove(selectMoim.selectedIndex);
+
+          localStorage.setItem('moims', JSON.stringify(imoims));
+
+          console.log("탈퇴 완료");
+        }
+      }
+    }
+  }
+
+  function loadMoim() {
+    for (let i = 0; i < moims.length; i++) {
+      // i번째 모임의 멤버 순회
+      for (let k = 0; k < moims[i].members.length; k++) {
+        // 로그인 유저가 i번째 모임의 멤버일 때
+        if (moims[i].members[k].email == loginUser.email) {
+          // select 안에 들어갈 option 생성
+          let moim = document.createElement("option");
+          moim.textContent = moims[i].moimName;
+          // addMoim(select) 에 추가
+          selectMoim.append(moim);
+        }
+      }
+    }
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+</script>
+</body>
+
+</html>

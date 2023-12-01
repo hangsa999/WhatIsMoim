@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/login.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #E2E3E5;
+    margin: 0;
+    padding: 0;
+  }
+
+  .login-wrapper {
+    border: 1.5px solid black;
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #EFF1F0;
+    border-radius: 5px;
+
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+
+  label {
+    display: block;
+    margin: 10px 0;
+  }
+
+  #test {
+    background-color: #969691;
+    color: #EFF1F0;
+    border: none;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+  }
+
+  #sign-up {
+    background-color: #969691;
+    color: #EFF1F0;
+    border: none;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+  }
+
+  #checkbox > * {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 13px;
+    white-space: nowrap;
+    margin-right: 195px;
+  }
+
+  #checkbox input {
+    margin-top: 13px;
+  }
+
+</style>
+
+<body>
+<div class="login-wrapper">
+  <h2>Login</h2>
+  <input type="text" name="userid" id="email" placeholder="Email">
+  <input type="password" name="userPassword" id="password" placeholder="Password">
+  <div id="checkbox">
+    <label for="remember-check">
+      <input type="checkbox" id="remember-check">이메일 저장하기
+    </label>
+  </div>
+  <input type="submit" id="test" onclick="checkValue()" value="Sign-in">
+  <label id="sign-up" onclick="location.href='signup.html'">Sign-up</label>
+</div>
+
+<script>
+  $(document).ready(function () {
+    var key = getCookie("key");
+    $("#email").val(key);
+
+    if ($("#email").val() != "") {
+      $("#remember-check").prop("checked", true);
+    }
+
+    $("#remember-check").change(function () {
+      if ($("#remember-check").is(":checked")) {
+        setCookie("key", $("#email").val(), 7);
+      } else {
+        deleteCookie("key");
+      }
+    });
+
+    $("#email").keyup(function () {
+      if ($("#remember-check").is(":checked")) {
+        setCookie("key", $("#email").val(), 7);
+      }
+    });
+
+    function setCookie(cookieName, value, exdays) {
+      var exdate = new Date();
+      exdate.setDate(exdate.getDate() + exdays);
+      var cookieValue = encodeURIComponent(value) + ((exdays == null) ? "" : "; expires=" + exdate.toGMTString());
+      document.cookie = cookieName + "=" + cookieValue;
+    }
+
+    function deleteCookie(cookieName) {
+      var expireDate = new Date();
+      expireDate.setDate(expireDate.getDate() - 1);
+      document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
+    }
+
+    function getCookie(cookieName) {
+      cookieName = cookieName + '=';
+      var cookieData = document.cookie;
+      var start = cookieData.indexOf(cookieName);
+      var cookieValue = '';
+      if (start != -1) {
+        start += cookieName.length;
+        var end = cookieData.indexOf(';', start);
+        if (end == -1)
+          end = cookieData.length;
+        cookieValue = cookieData.substring(start, end);
+      }
+      return decodeURIComponent(cookieValue);
+    }
+  });
+</script>
+</body>
+
+</html>

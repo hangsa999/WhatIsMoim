@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입 페이지</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/signup.js"></script>
+</head>
+
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #E2E3E5;
+    margin: 0;
+    padding: 0;
+  }
+
+  .wrapper {
+    border: 1.5px solid black;
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #EFF1F0;
+    border-radius: 5px;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+
+  .error {
+    color: red;
+    margin-top: 5px;
+  }
+
+  .line {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  hr {
+    width: 100%;
+    background-color: #969691;
+    height: 1.5px;
+    border: none;
+  }
+
+  .signUp {
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  button {
+    background-color: #969691;
+    color: #EFF1F0;
+    border: none;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 5px;
+    cursor: pointer;
+    width: calc(45% - 5px);
+    box-sizing: border-box;
+    border-radius: 5px;
+  }
+
+  .gender {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .gender label {
+    display: flex;
+    align-items: center;
+    width: 48%; /* 가로 길이 조절 */
+  }
+
+  .gender input {
+    margin-top: 12px;
+    width: 20%;
+  }
+
+</style>
+
+<body>
+<div class="wrapper">
+  <div class="title">
+    <h1 style="font-size: 21px;">회원가입</h1>
+  </div>
+  <div class="email">
+    <input id="email" type="text" placeholder="이메일을 입력해 주세요.">
+    <div id="emailError" class="error"></div>
+  </div>
+  <div class="name">
+    <input id="name" type="text" placeholder="이름을 입력해 주세요.">
+    <div id="nameError" class="error"></div>
+  </div>
+  <div class="password">
+    <input id="password" type="password" placeholder="비밀번호를 입력해 주세요.">
+    <div id="passwordError" class="error"></div>
+  </div>
+  <div class="passwordCheck">
+    <input id="passwordCheck" type="password" placeholder="비밀번호를 다시 입력해 주세요.">
+    <div id="passwordCheckError" class="error"></div>
+  </div>
+  <div class="gender">
+    <label for="gender_man">남성<input id="gender_man" type="radio" name="gender"></label>
+    <label for="gender_woman">여성<input id="gender_woman" type="radio" name="gender"></label>
+    <div id="genderError" class="error"></div>
+  </div>
+
+  <div class="line">
+    <hr>
+  </div>
+  <div class="signUp">
+    <button id="signUpButton" onclick="signUpCheck()">가입하기</button>
+    <button id="goToLogin" onclick="location.href='login.html'">로그인하러 가기</button>
+  </div>
+</div>
+
+</body>
+
+</html>

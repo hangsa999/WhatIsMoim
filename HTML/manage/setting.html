@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>모임 관리</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #E2E3E5;
+      margin: 0;
+      padding: 0;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 100px auto;
+    }
+
+    button {
+      background-color: #969691;
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 10px 0;
+      cursor: pointer;
+      width: 200px;
+      box-sizing: border-box;
+      border-radius: 5px; /* 모서리 둥글게 추가 */
+      transition: background-color 0.3s; /* 배경색 변경 시 부드럽게 효과 */
+    }
+
+    button:hover {
+      background-color: rgb(128, 128, 128);
+    }
+  </style>
+</head>
+<body>
+
+<div>
+  <button id="makeMoim" onclick="location.href='makemoim.html'">모임 생성</button>
+  <button id="signUpMoim" onclick="location.href='signupmoim.html'">모임 참가</button>
+  <button id="secessionMoim" onclick="location.href='secessionmoim.html'">모임 탈퇴</button>
+  <button id="deleteMoim" onclick="location.href='deletemoim.html'">모임 삭제</button>
+  <button onclick="goBack()">돌아가기</button>
+</div>
+
+</body>
+
+<script>
+  function goBack() {
+    window.history.back();
+  }
+</script>
+</html>
